@@ -18,5 +18,9 @@ module.exports = {
   ],
   rules: {
     'react/react-in-jsx-scope': 0,
+    'consistent-return': 0,
+    'no-plusplus': 0,
+    'jsx-a11y/media-has-caption': 0,
+    'react/button-has-type': 0,
   },
 };
