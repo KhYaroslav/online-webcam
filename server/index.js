@@ -7,14 +7,16 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const { version, validate } = require('uuid');
 
-const ACTIONS = require('./src/socket/actions');
+const ACTIONS = require('../src/socket/actions');
 
 const PORT = process.env.PORT || 8080;
 
 function getClientRooms() {
   const { rooms } = io.sockets.adapter;
 
-  return Array.from(rooms.keys()).filter((roomID) => validate(roomID) && version(roomID) === 4);
+  return Array.from(rooms.keys()).filter(
+    (roomID) => validate(roomID) && version(roomID) === 4,
+  );
 }
 
 function shareRoomsInfo() {
@@ -61,16 +63,15 @@ io.on('connection', (socket) => {
       .forEach((roomID) => {
         const clients = Array.from(io.sockets.adapter.rooms.get(roomID) || []);
 
-        clients
-          .forEach((clientID) => {
-            io.to(clientID).emit(ACTIONS.REMOVE_PEER, {
-              peerID: socket.id,
-            });
-
-            socket.emit(ACTIONS.REMOVE_PEER, {
-              peerID: clientID,
-            });
+        clients.forEach((clientID) => {
+          io.to(clientID).emit(ACTIONS.REMOVE_PEER, {
+            peerID: socket.id,
           });
+
+          socket.emit(ACTIONS.REMOVE_PEER, {
+            peerID: clientID,
+          });
+        });
 
         socket.leave(roomID);
       });

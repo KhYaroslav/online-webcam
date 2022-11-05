@@ -22,5 +22,7 @@ module.exports = {
     'no-plusplus': 0,
     'jsx-a11y/media-has-caption': 0,
     'react/button-has-type': 0,
+    'no-console': 0,
+    'no-shadow': 0,
   },
 };
